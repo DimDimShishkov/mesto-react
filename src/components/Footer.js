@@ -1,7 +1,9 @@
+import React from "react";
+
 function Footer() {
     return (
-        <footer class="footer">
-            <p class="footer__copyright">© 2022 DimDim</p>
+        <footer className="footer">
+            <p className="footer__copyright">© 2022 DimDim</p>
         </footer>
     );
 }

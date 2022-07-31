@@ -2,8 +2,9 @@
     display: flex;
     flex-direction: row;
     padding: 40px 0 0;
-    margin: 0;
+    margin: 0 auto;
     width: 100%;
+    max-width: 880px;
     align-items: center;
   }
   
