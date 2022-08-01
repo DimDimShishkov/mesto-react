@@ -3,9 +3,9 @@
 import React from 'react';
 import Footer from './Footer';
 import Header from './Header';
+import ImagePopup from './ImagePopup';
 import Main from './Main';
-import PopupWithForm from './PopupWithForm1';
-import api from 'utils/Api';
+import PopupWithForm from './PopupWithForm';
 
 function App() {
     const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
@@ -24,31 +24,28 @@ function App() {
         setEditAvatarPopupOpen(true);
     }
 
-    function biba () {
-      console.log(isEditProfilePopupOpen)
-    }
-
     function handleEditProfileClick() {
-        console.log(isEditProfilePopupOpen);
         setEditProfilePopupOpen(true);
-        setTimeout(biba, 10000)
     }
 
     function handleAddPlaceClick() {
         setAddPlacePopupOpen(true);
     }
 
-    function handleSelectedCard(card) {
+    function onCardClick(card) {
         setSelectedCard(card);
     }
 
     return (
         <div className="page">
             <Header />
-            <Main 
-            onEditAvatar={handleEditAvatarClick} 
-            onEditProfile={handleEditProfileClick} 
-            onAddPlace ={handleAddPlaceClick}/>
+            <Main
+                onEditAvatar={handleEditAvatarClick}
+                onEditProfile={handleEditProfileClick}
+                onAddPlace={handleAddPlaceClick}
+                onCardClick={onCardClick}
+            />
+
             <Footer />
 
             {/* попап редактирования имени профиля */}
@@ -118,33 +115,35 @@ function App() {
                 buttonText="Создать"
                 onClose={closeAllPopups}
             >
-                        <fieldset className="popup__fieldset">
-                            <label className="popup__label popup__label_value_name">
-                                <input
-                                    required
-                                    // minLength="2"
-                                    // maxLength="30"
-                                    type="text"
-                                    className="popup__input"
-                                    id="name"
-                                    placeholder="Название"
-                                />
-                                <span className="popup__input-error popup__input-error_type_name"></span>
-                            </label>
+                <fieldset className="popup__fieldset">
+                    <label className="popup__label popup__label_value_name">
+                        <input
+                            required
+                            // minLength="2"
+                            // maxLength="30"
+                            type="text"
+                            className="popup__input"
+                            id="name"
+                            placeholder="Название"
+                        />
+                        <span className="popup__input-error popup__input-error_type_name"></span>
+                    </label>
 
-                            <label className="popup__label popup__label_value_description">
-                                <input
-                                    required
-                                    type="url"
-                                    className="popup__input"
-                                    id="link"
-                                    placeholder="Ссылка на картинку"
-                                />
-                                <span className="popup__input-error popup__input-error_type_link"></span>
-                            </label>
-                        </fieldset>
+                    <label className="popup__label popup__label_value_description">
+                        <input
+                            required
+                            type="url"
+                            className="popup__input"
+                            id="link"
+                            placeholder="Ссылка на картинку"
+                        />
+                        <span className="popup__input-error popup__input-error_type_link"></span>
+                    </label>
+                </fieldset>
             </PopupWithForm>
 
+            {/* попап просмотра карточки */}
+            <ImagePopup card={selectedCard} onClose={closeAllPopups} />
         </div>
     );
 }
