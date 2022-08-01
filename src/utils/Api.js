@@ -87,7 +87,7 @@ class Api {
   }
 }
 
-const api = new Api({
+export const api = new Api({
   url: "https://mesto.nomoreparties.co/v1/cohort-45/",
   headers: {
     authorization: "02d68e11-bd2f-4860-a475-a40f4f8a5368",
