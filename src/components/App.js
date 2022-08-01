@@ -1,5 +1,5 @@
 import React from 'react';
-import {api} from './api';
+import {api} from '../utils/api';
 import Footer from './Footer';
 import Header from './Header';
 import ImagePopup from './ImagePopup';
@@ -48,7 +48,7 @@ function App() {
           .catch((err) => {
               console.log(err);
           });
-  });
+  }, []);
 
     return (
         <div className="page">
