@@ -2,28 +2,13 @@ import React from 'react';
 import api from 'utils/Api';
 import Card from './Card';
 
-function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
+function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, userName, userAvatar, userDescription}) {
     const [cards, setCards] = React.useState([]);
-    const [userName, setUserName] = React.useState();
-    const [userAvatar, setUserAvatar] = React.useState();
-    const [userDescription, setUserDescription] = React.useState();
 
     React.useEffect(() => {
         api.handleDownloadCards()
             .then((res) => {
                 setCards(res);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    });
-
-    React.useEffect(() => {
-        api.handleDownloadProfileInfo()
-            .then((res) => {
-                setUserName(res.name);
-                setUserAvatar(res.avatar);
-                setUserDescription(res.about);
             })
             .catch((err) => {
                 console.log(err);

@@ -1,6 +1,5 @@
-/* import './App.css'; */
-
 import React from 'react';
+import api from 'utils/Api';
 import Footer from './Footer';
 import Header from './Header';
 import ImagePopup from './ImagePopup';
@@ -12,6 +11,9 @@ function App() {
     const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(false);
     const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
     const [selectedCard, setSelectedCard] = React.useState(null);
+    const [userName, setUserName] = React.useState();
+    const [userAvatar, setUserAvatar] = React.useState();
+    const [userDescription, setUserDescription] = React.useState();
 
     function closeAllPopups() {
         setEditAvatarPopupOpen(false);
@@ -36,6 +38,18 @@ function App() {
         setSelectedCard(card);
     }
 
+    React.useEffect(() => {
+      api.handleDownloadProfileInfo()
+          .then((res) => {
+              setUserName(res.name);
+              setUserAvatar(res.avatar);
+              setUserDescription(res.about);
+          })
+          .catch((err) => {
+              console.log(err);
+          });
+  });
+
     return (
         <div className="page">
             <Header />
@@ -44,6 +58,9 @@ function App() {
                 onEditProfile={handleEditProfileClick}
                 onAddPlace={handleAddPlaceClick}
                 onCardClick={onCardClick}
+                userName={userName}
+                userAvatar={userAvatar}
+                userDescription={userDescription}
             />
 
             <Footer />
