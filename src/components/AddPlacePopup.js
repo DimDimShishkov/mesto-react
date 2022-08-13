@@ -1,17 +1,8 @@
-import React from 'react';
+/* import React from 'react';
 
 function PopupWithForm(props) {
-  
-  function closePopup(evt) {
-    if (evt.key === 'Escape' ||
-    evt.target.classList.contains('popup_opened') ||
-    evt.target.classList.contains('popup__exit-button')) {
-      props.onClose()
-    }
-  }
-
   return (
-    <div className={`popup popup_type_${props.name} ${props.isOpen ? 'popup_opened' : ''}`} onClick={closePopup}>
+    <div onClick={props.onClose} className={`popup popup_type_${props.name} ${props.isOpen ? 'popup_opened' : ''}`}>
       <div className="popup__container">
         <h2 className="popup__title">{props.title}</h2>
 
@@ -28,3 +19,4 @@ function PopupWithForm(props) {
 }
 
 export default PopupWithForm;
+ */

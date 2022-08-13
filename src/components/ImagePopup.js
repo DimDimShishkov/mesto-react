@@ -1,19 +1,28 @@
 const React = require('react');
 
 function ImagePopup(props) {
-    return (
-        <div className={`popup popup_type_image ${props.card ? 'popup_opened' : ''}`}>
-            <div className="popup__looking">
-                <img
-                    src={props.card ? props.card.link : '#'}
-                    alt={props.card ? props.card.name : ''}
-                    className="popup__image"
-                />
-                <button className="popup__exit-button" type="button" onClick={props.onClose}></button>
-                <h2 className="popup__description">{props.card ? props.card.name : ''}</h2>
-            </div>
-        </div>
-    );
+
+  function closePopup(evt) {
+    if (evt.key === 'Escape' ||
+    evt.target.classList.contains('popup_opened') ||
+    evt.target.classList.contains('popup__exit-button')) {
+      props.onClose()
+    }
+  }
+
+  return (
+    <div className={`popup popup_type_image ${props.card ? 'popup_opened' : ''}`} onClick={closePopup}>
+      <div className="popup__looking">
+        <img
+          src={props.card ? props.card.link : '#'}
+          alt={props.card ? props.card.name : ''}
+          className="popup__image"
+        />
+        <button className="popup__exit-button" type="button" onClick={props.onClose}></button>
+        <h2 className="popup__description">{props.card ? props.card.name : ''}</h2>
+      </div>
+    </div>
+  );
 }
 
 export default ImagePopup;
