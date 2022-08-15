@@ -2,6 +2,7 @@ import { CurrentUserContext } from 'contexts/CurrentUserContext';
 import React from 'react';
 import { api } from '../utils/api';
 import AddPlacePopup from './AddPlacePopup';
+import DeleteCardPopup from './DeleteCardPopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import EditProfilePopup from './EditProfilePopup';
 import Footer from './Footer';
@@ -10,12 +11,14 @@ import ImagePopup from './ImagePopup';
 import Main from './Main';
 
 function App() {
+  const [pageBlock, setPageBlock] = React.useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
+  const [isDeletePlacePopupOpen, setDeletePlacePopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [currentUser, setCurrentUser] = React.useState();
+  const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
 
   function closeAllPopups() {
@@ -23,6 +26,14 @@ function App() {
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
     setSelectedCard(null);
+    setDeletePlacePopupOpen(false);
+  }
+
+  function handlePageScroll() {
+    if (pageBlock) {
+      document.body.style.overflow = "hidden"
+    }
+    document.body.style.overflow = "visible"
   }
 
   function handleEditAvatarClick() {
@@ -39,6 +50,10 @@ function App() {
 
   function onCardClick(card) {
     setSelectedCard(card);
+  }
+
+  function handleCardDeleteClick(card) {
+    setDeletePlacePopupOpen(card);
   }
 
   // загрузка данных пользователя
@@ -70,7 +85,9 @@ function App() {
     api
       .handleCardLikes(id, !isLiked)
       .then((res) => {
-        setCards(cards.map((card) => (card._id === res._id ? res : card)));
+        setCards((prevState) => {
+          return prevState.map((card) => (card._id === res._id ? res : card));
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -79,14 +96,20 @@ function App() {
 
   // функция удаления картинки
   function handleCardDelete(id) {
+    setIsLoading(true);
     api
       .handleDeleteServerCard(id)
-      .then((res) => {
-        setCards(cards.filter((card) => card._id !== res._id));
-        
+      .then(() => {
+        setCards((prevState) => {
+          return prevState.filter((card) => card._id !== id);
+        });
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }
 
@@ -143,7 +166,9 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <div className="page">
+      <div
+        className={`page`}
+      >
         <Header />
         <Main
           onEditAvatar={handleEditAvatarClick}
@@ -152,7 +177,7 @@ function App() {
           onCardClick={onCardClick}
           cards={cards}
           onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
+          onCardDelete={handleCardDeleteClick}
         />
 
         <Footer />
@@ -183,6 +208,14 @@ function App() {
 
         {/* попап просмотра карточки */}
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+
+        {/* попап удаления карточки */}
+        <DeleteCardPopup
+          isOpen={isDeletePlacePopupOpen}
+          onCardDelete={handleCardDelete}
+          onClose={closeAllPopups}
+          isLoading={isLoading}
+        ></DeleteCardPopup>
       </div>
     </CurrentUserContext.Provider>
   );

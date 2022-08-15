@@ -6,6 +6,13 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
   const cardLinkRef = React.useRef();
   const [buttonText, setButtonText] = React.useState('Создать');
 
+  React.useEffect(() => {
+    if (isOpen) {
+      cardNameRef.current.value = '';
+      cardLinkRef.current.value = '';
+    }
+  }, [isOpen]);
+
   function handleSubmit(evt) {
     evt.preventDefault();
     if (isLoading) {
@@ -17,8 +24,6 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
       name: cardNameRef.current.value,
       link: cardLinkRef.current.value,
     });
-    cardNameRef.current.value = '';
-    cardLinkRef.current.value = '';
   }
 
   return (

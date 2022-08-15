@@ -9,6 +9,9 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
   const [description, setDescription] = React.useState('');
   const currentUser = React.useContext(CurrentUserContext);
   const [buttonText, setButtonText] = React.useState('Сохранить');
+  // валидация формы
+  const [errors, setErrors] = React.useState({name: false, description: false})
+  const [errorMessage, setErrorMessage] = React.useState({name: '', description: ''})
 
   React.useEffect(() => {
     if (isOpen) {
@@ -58,7 +61,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
             className="popup__input"
             id="title"
             placeholder="Введите имя профиля"
-            value={name}
+            value={name || ""}
             onChange={handleNameChange}
           />
           <span className="popup__input-error popup__input-error_type_title"></span>
@@ -73,7 +76,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
             className="popup__input"
             id="description"
             placeholder="Введите описание профиля"
-            value={description}
+            value={description || ""}
             onChange={handleDescriptionChange}
           />
           <span className="popup__input-error popup__input-error_type_description"></span>
