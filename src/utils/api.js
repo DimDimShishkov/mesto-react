@@ -18,8 +18,8 @@ class Api {
       method: "PATCH",
       headers: this._headers,
       body: JSON.stringify({
-        name: data.title,
-        about: data.description,
+        name: data.name,
+        about: data.about,
       }),
     }).then((res) => this._handleReturn(res));
   }

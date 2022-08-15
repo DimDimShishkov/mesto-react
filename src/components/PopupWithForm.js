@@ -15,7 +15,7 @@ function PopupWithForm(props) {
       <div className="popup__container">
         <h2 className="popup__title">{props.title}</h2>
 
-        <form autoComplete="off" noValidate className="popup__form" name={props.name}>
+        <form autoComplete="off" noValidate className="popup__form" name={props.name} onSubmit={props.onSubmit}>
           {props.children}
           <button type="submit" className="popup__submit-button">
             {props.buttonText}
