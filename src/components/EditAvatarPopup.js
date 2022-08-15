@@ -2,11 +2,17 @@ import { CurrentUserContext } from 'contexts/CurrentUserContext';
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
 
-function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
+function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading }) {
   const avatarRef = React.useRef()
+  const [buttonText, setButtonText] = React.useState('Сохранить');
 
   function handleSubmit(evt) {
     evt.preventDefault();
+    if (isLoading) {
+      setButtonText('Сохранение...');
+    } else {
+      setButtonText('Сохранить');
+    }
     onUpdateAvatar({
       avatar: avatarRef.current.value
     });
@@ -18,7 +24,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
       name="avatar"
       isOpen={isOpen}
       title="Обновить аватар"
-      buttonText="Сохранить"
+      buttonText={buttonText}
       onClose={onClose}
       onSubmit={handleSubmit}
     >

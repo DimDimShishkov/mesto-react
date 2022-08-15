@@ -8,7 +8,6 @@ import Footer from './Footer';
 import Header from './Header';
 import ImagePopup from './ImagePopup';
 import Main from './Main';
-import PopupWithForm from './PopupWithForm';
 
 function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
@@ -39,7 +38,6 @@ function App() {
   }
 
   function onCardClick(card) {
-    console.log(card)
     setSelectedCard(card);
   }
 
@@ -79,22 +77,23 @@ function App() {
       });
   }
 
-    // функция удаления картинки
-    function handleCardDelete(id) {
-      api
-        .handleDeleteServerCard(id)
-        .then((res) => {
-          setCards(cards.filter((card) => (card._id !== res._id)));
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+  // функция удаления картинки
+  function handleCardDelete(id) {
+    api
+      .handleDeleteServerCard(id)
+      .then((res) => {
+        setCards(cards.filter((card) => card._id !== res._id));
+        
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
-    // функция редактирования профиля
-    function handleUpdateUser(data) {
-      setIsLoading(true);
-      api
+  // функция редактирования профиля
+  function handleUpdateUser(data) {
+    setIsLoading(true);
+    api
       .handleUploadProfileInfo(data)
       .then((res) => {
         setCurrentUser(res);
@@ -106,11 +105,12 @@ function App() {
       .finally(() => {
         setIsLoading(false);
       });
-    }
+  }
 
-    // функция редактирования аватара
-    function handleUpdateAvatar(data) {
-      api
+  // функция редактирования аватара
+  function handleUpdateAvatar(data) {
+    setIsLoading(true);
+    api
       .handleUploadProfileAvatar(data)
       .then((res) => {
         setCurrentUser(res);
@@ -119,20 +119,27 @@ function App() {
       .catch((err) => {
         console.log(err);
       })
-    }
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
 
-    // функция добавления карточки
-    function handleAddPlaceSubmit(card) {
-      api
+  // функция добавления карточки
+  function handleAddPlaceSubmit(card) {
+    setIsLoading(true);
+    api
       .handleUploadCard(card)
       .then((res) => {
-        setCards([res, ...cards]); 
+        setCards([res, ...cards]);
         closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
       })
-    }
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -151,40 +158,28 @@ function App() {
         <Footer />
 
         {/* попап редактирования имени профиля */}
-        <EditProfilePopup isOpen={isEditProfilePopupOpen} onUpdateUser={handleUpdateUser } onClose={closeAllPopups} isLoading={isLoading}></EditProfilePopup>
+        <EditProfilePopup
+          isOpen={isEditProfilePopupOpen}
+          onUpdateUser={handleUpdateUser}
+          onClose={closeAllPopups}
+          isLoading={isLoading}
+        ></EditProfilePopup>
 
         {/* попап редактирования аватара профиля */}
-        <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onUpdateAvatar={handleUpdateAvatar } onClose={closeAllPopups}></EditAvatarPopup>
+        <EditAvatarPopup
+          isOpen={isEditAvatarPopupOpen}
+          onUpdateAvatar={handleUpdateAvatar}
+          onClose={closeAllPopups}
+          isLoading={isLoading}
+        ></EditAvatarPopup>
 
         {/* попап добавления новой карточки */}
-        <AddPlacePopup isOpen={isAddPlacePopupOpen} onAddPlace={handleAddPlaceSubmit } onClose={closeAllPopups}></AddPlacePopup>
-{/*         <PopupWithForm
-          name="images"
+        <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
-          title="Новое место"
-          buttonText="Создать"
+          onAddPlace={handleAddPlaceSubmit}
           onClose={closeAllPopups}
-        >
-          <fieldset className="popup__fieldset">
-            <label className="popup__label popup__label_value_name">
-              <input
-                required
-                // minLength="2"
-                // maxLength="30"
-                type="text"
-                className="popup__input"
-                id="name"
-                placeholder="Название"
-              />
-              <span className="popup__input-error popup__input-error_type_name"></span>
-            </label>
-
-            <label className="popup__label popup__label_value_description">
-              <input required type="url" className="popup__input" id="link" placeholder="Ссылка на картинку" />
-              <span className="popup__input-error popup__input-error_type_link"></span>
-            </label>
-          </fieldset>
-        </PopupWithForm> */}
+          isLoading={isLoading}
+        ></AddPlacePopup>
 
         {/* попап просмотра карточки */}
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />

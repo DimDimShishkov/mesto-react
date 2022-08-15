@@ -1,16 +1,18 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
 
-/* попап редактирования имени профиля */
-
-function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
+function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
   const cardNameRef = React.useRef();
   const cardLinkRef = React.useRef();
+  const [buttonText, setButtonText] = React.useState('Создать');
 
   function handleSubmit(evt) {
-    // Запрещаем браузеру переходить по адресу формы
     evt.preventDefault();
-    console.log(cardNameRef);
+    if (isLoading) {
+      setButtonText('Загрузка...');
+    } else {
+      setButtonText('Создать');
+    }
     onAddPlace({
       name: cardNameRef.current.value,
       link: cardLinkRef.current.value,
@@ -24,7 +26,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       name="images"
       isOpen={isOpen}
       title="Новое место"
-      buttonText="Создать"
+      buttonText={buttonText}
       onClose={onClose}
       onSubmit={handleSubmit}
     >

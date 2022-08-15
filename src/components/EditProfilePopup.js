@@ -10,17 +10,6 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
   const currentUser = React.useContext(CurrentUserContext);
   const [buttonText, setButtonText] = React.useState('Сохранить');
 
-  // уведомление о процессе загрузки
-  function renderLoading() {
-      if (isLoading) {
-        setButtonText("Удаление...");
-      } else {
-        setButtonText("Сохранить");
-      }
-    }
-
-  // После загрузки текущего пользователя из API
-  // его данные будут использованы в управляемых компонентах.
   React.useEffect(() => {
     if (isOpen) {
       setName(currentUser?.name);
@@ -38,10 +27,12 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
   }
 
   function handleSubmit(evt) {
-    // Запрещаем браузеру переходить по адресу формы
     evt.preventDefault();
-
-    // Передаём значения управляемых компонентов во внешний обработчик
+    if (isLoading) {
+      setButtonText('Удаление...');
+    } else {
+      setButtonText('Сохранить');
+    }
     onUpdateUser({
       name,
       about: description,
